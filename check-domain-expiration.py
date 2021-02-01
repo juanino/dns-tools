@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import whois
 from datetime import datetime
@@ -7,16 +7,16 @@ from sys import argv,exit
 now = datetime.now()
 
 if len(argv) < 2:
-    print 'No domain specified on the command line, usage:  '
-    print ''
-    print '    ./check-domain.py example.net'
+    print('No domain specified on the command line, usage:  ')
+    print('')
+    print('    ./check-domain.py example.net')
     exit(1)
 
 domain = argv[1]
 try:
-    w = whois.whois(domain)
-except whois.parser.PywhoisError as e:
-    print e
+    w = whois.query(domain)
+except whois.query.PywhoisError as e:
+    print(e)
     exit(1)
 
 if type(w.expiration_date) == list:
@@ -30,11 +30,11 @@ timedelta = w.expiration_date - now
 days_to_expire = timedelta.days
 
 if timedelta.days <= 60 and timedelta.days > 30:
-    print 'WARNING: %s is going to expire in %s days, expiration date is set to %s' % (domain, days_to_expire, domain_expiration_date)
+    print('WARNING: %s is going to expire in %s days, expiration date is set to %s' % (domain, days_to_expire, domain_expiration_date))
     exit(1)
 elif timedelta.days <= 30:
-    print 'WARNING: %s is going to expire in %s days, expiration date is set to %s' % (domain, days_to_expire, domain_expiration_date)
+    print('WARNING: %s is going to expire in %s days, expiration date is set to %s' % (domain, days_to_expire, domain_expiration_date))
     exit(2)
 else:
-    print 'OK, the domain %s is expiring on %s, %s days to go. No need to renew at this moment of time' % (domain, domain_expiration_date, days_to_expire)
+    print('OK, the domain %s is expiring on %s, %s days to go. No need to renew at this moment of time' % (domain, domain_expiration_date, days_to_expire))
     exit(0)
