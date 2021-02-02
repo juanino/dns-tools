@@ -15,7 +15,7 @@ if len(argv) < 2:
 domain = argv[1]
 try:
     w = whois.query(domain)
-except whois.query.PywhoisError as e:
+except Exception as e:
     print(e)
     exit(1)
 
